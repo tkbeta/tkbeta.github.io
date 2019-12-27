@@ -26,18 +26,29 @@ titles:
 key: page-about
 ---
 
-Hi，你好。
+Hi, nice to see you.
 
-![Preface](https://bing.ioliu.cn/v1/rand?d=1)
+![Preface](https://picsum.photos/800/600)
+<!-- Backup api: https://source.unsplash.com/random/800x600 -->
 
 ```bash
+
 echo "Hello, World!"
-<p>Hello, World!</p> 
+
+<p>Hello, World!</p>
+
 print("Hello, World!")
+
 printf("Hello, World!");
+
 BEGIN {print "Hello, World!"}
+
 Console.WriteLine("Hello, World!");
-System.out.println("Hello, World!"); 
+
+System.out.println("Hello, World!");
+
 (() => console.log('Hello, World!'))();
+
 std::cout << "Hello, World!" << std::endl;
+
 ```
