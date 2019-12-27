@@ -26,11 +26,11 @@ titles:
 key: page-about
 ---
 
+Hi，你好。
+
 ![Preface](https://bing.ioliu.cn/v1/rand?d=1)
 
-Hi,你好。
-
-```
+```bash
 echo "Hello, World!"
 <p>Hello, World!</p> 
 print("Hello, World!")
