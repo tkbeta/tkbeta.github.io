@@ -28,7 +28,7 @@ key: page-about
 
 Hi, nice to see you.
 
-![Preface](https://bing.ioliu.cn/v1/rand?w=1024&h=768)
+![Preface](https://bing.ioliu.cn/v1/rand?w=800&h=480)
 <!-- Backup api: https://source.unsplash.com/random/800x600 -->
-<!-- Backup api:  -->
+<!-- Backup api: https://bing.ioliu.cn/v1/rand?w=1024&h=768 -->
 <!-- Backup api: https://picsum.photos/800/600 -->
