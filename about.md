@@ -26,7 +26,9 @@ titles:
 key: page-about
 ---
 
-Hi, I am Chandler. Nice to see you, and hope all is well.
+Hi, I am Chandler.
+
+Nice to see you, and hope all is well.
 
 ![Preface](https://bing.ioliu.cn/v1/rand?w=800&h=480)
 <!-- Backup api: https://source.unsplash.com/random/800x600 -->
