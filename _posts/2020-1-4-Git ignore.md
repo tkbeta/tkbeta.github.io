@@ -2,6 +2,7 @@
 layout: article
 title: Git ignore的几种用法
 tags: git
+key: git_ignore
 aside:
     toc: true
 ---
@@ -18,7 +19,7 @@ Git是如今最主流的版本管理工具，经常应用在多人协作中，�
 Git并不知道哪些文件属于上述范畴，对于新文件或者改动过的文件，git status统统会list出来，git add时也会将这些文件加入index中进而commit，如下面例子中的.pyc文件。
 
 ```bash
-# git status
+$ git status
 On branch master
 Your branch is up-to-date with 'origin/master'.
 Untracked files:
@@ -43,9 +44,9 @@ nothing added to commit but untracked files present (use "git add" to track)
 加入后，git status就不会在untracked files中看到.pyc文件：
 
 ```bash
-# cat .gitignore
+$ cat .gitignore
 *.pyc
-# git status
+$ git status
 On branch master
 Your branch is up-to-date with 'origin/master'.
 Untracked files:
@@ -59,10 +60,10 @@ nothing added to commit but untracked files present (use "git add" to track)
 注意，按照惯例，.gitignore文件应该是需要大家公用的，也就是其中定义的ignore条目应该具有通用性。因此.gitiignore这个文件也需要push到remote branch，以便所有人同步配置。
 
 ```bash
-# git add .gitignore
-# git commit -m "Add .gitignore"
-# git push origin master
-# git status
+$ git add .gitignore
+$ git commit -m "Add .gitignore"
+$ git push origin master
+$ git status
 On branch master
 Your branch is up-to-date with 'origin/master'.
 nothing to commit, working directory clean
@@ -77,7 +78,7 @@ Btw，Github针对主流的编程语言，提供了一个.gitignore的模板，�
 下面例子是把.vscode这个IDE生成的目录加入到.git/info/exclude：
 
 ```bash
-# git status
+$ git status
 On branch master
 Your branch is up-to-date with 'origin/master'.
 Untracked files:
@@ -86,8 +87,8 @@ Untracked files:
 	.vscode/
 
 nothing added to commit but untracked files present (use "git add" to track)
-# echo ".vscode" >> .git/info/exclude
-# git status
+$ echo ".vscode" >> .git/info/exclude
+$ git status
 On branch master
 Your branch is up-to-date with 'origin/master'.
 nothing to commit, working directory clean
@@ -113,7 +114,7 @@ git update-index --skip-worktree config.json
 2. 在配置后，如果本地的config.json不变，仅远端的config.json发生变更，则pull可以下拉并同步到最新版本。但如果本地和远端的config.json同时发生了变更，在pull或merge时，会报错：
 
    ```bash
-   # git pull
+   $ git pull
    remote: Counting objects: 2, done.
    remote: Compressing objects: 100% (2/2), done.
    remote: Total 2 (delta 1), reused 0 (delta 0)
@@ -130,7 +131,7 @@ git update-index --skip-worktree config.json
    此时，根据提示使用git stash，但发现git stash对标记为--skip-worktree的文件并不搭理：
 
    ```bash
-   # git stash
+   $ git stash
    No local changes to save
    ```
 
@@ -139,7 +140,7 @@ git update-index --skip-worktree config.json
 如果要查看哪些文件被标记为skip-worktree，可以用`git ls-files -v`查看最前面的flag，S表示该文件被标记为skip-worktree：
 
 ```bash
-# git ls-files -v .
+$ git ls-files -v .
 H .gitignore
 S config.json
 H demo.py
@@ -163,7 +164,7 @@ git update-index --assume-unchanged modules/*
 同上一种方法，可以用`git ls-files -v`来查看哪些文件被标记为assume-unchanged，小写字母表示该文件被标记为assume-unchanged：
 
 ```bash
-# git ls-files -v .
+$ git ls-files -v .
 H .gitignore
 S config.json
 H demo.py
@@ -171,25 +172,25 @@ h modules/__init__.py
 h modules/libdemo.py
 ```
 
-Git设置这个flag的初衷是为了加速和优化git stat的性能，因此只有确定这些文件不被更改时，才选择这种方式。但是在git pull的时候，依然会去比对远端的差异，如果有更新，还是会同步本地文件，并且，__会偷偷将assume-unchanged的标记取消__（Git：说好的不会变呢，既然毁约就说明这个标记失效了，那么让我作废它吧。）
+Git设置这个flag的初衷是为了加速和优化git stat的性能，因此只有确定这些文件不被更改时，才选择这种方式。但是在git pull的时候，依然会去比对远端的差异，如果有更新，还是会同步本地文件，并且，__会偷偷将assume-unchanged的标记取消__（Git：说好的不会变呢，既然对方毁约就说明这个标记失效了，那么请让我作废它吧。）
 
 方法三和方法四的配置方式并不够直观，需要使用多次后方能加深理解。国外有位小哥早在八年前就做过一些[测试](https://fallengamer.livejournal.com/93321.html)，我摘录在这里供参考。
 
 | **Operation**                                                | **File with assume-unchanged flag**                          | **File with skip-worktree flag**                             | **Comments**                                                 |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | # File is changed both in local repository and upstream.<br /> **git pull** | Git wouldn’t overwrite local file. Instead it would output conflicts and advices how to resolve them. | Git wouldn’t overwrite local file. Instead it would output conflicts and advices how to resolve them. | Git preserves local changes anyway. Thus you wouldn’t accidently lose any data that you marked with any of the flags. |
-| # File is changed both in local repository and upstream, trying to pull anyway.<br /> **git stash<br /> git pull** | Discards all local changes without any possibility to restore them. The effect is like ‘git reset --hard’. ‘git pull’ call will succeed. | Stash wouldn’t work on skip-worktree files. ‘git pull’ will fail with the same error as above. Developer is forced to manually reset skip-worktree flag to be able to stash and complete the failing pull. | Using skip-worktree results in some extra manual work but at least you wouldn’t lose any data if you had any local changes. |
-| # No local changes, upstream file changed.<br /> **git pull** | Content is updated, flag is lost. ‘git ls-files -v’ would show that flag is modified to H (from h). | Content is updated, flag is preserved. ‘git ls-files -v' would show the same S flag as before the pull. | Both flags wouldn’t prevent you from getting upstream changes. Git detects that you broke assume-unchanged promise and choses to reflect the reality by resetting the flag. |
-| # With local file changed.<br /> **git reset --hard**         | File content is reverted. Flag is reset to H (from h).       | File content is intact. Flag remains the same.               | Git doesn’t touch skip-worktree file and reflects reality (the file promised to be unchanged actually was changed) for assume-unchanged file. |
+| # File is changed both in local repository and upstream, trying to pull anyway.<br /> **git stash<br /> git pull** | Discards all local changes without any possibility to restore them. The effect is like `git reset --hard`. `git pull` call will succeed. | Stash wouldn’t work on skip-worktree files. `git pull` will fail with the same error as above. Developer is forced to manually reset skip-worktree flag to be able to stash and complete the failing pull. | Using skip-worktree results in some extra manual work but at least you wouldn’t lose any data if you had any local changes. |
+| # No local changes, upstream file changed.<br /> **git pull** | Content is updated, flag is lost. `git ls-files -v` would show that flag is modified to H (from h). | Content is updated, flag is preserved. `git ls-files -v` would show the same S flag as before the pull. | Both flags wouldn’t prevent you from getting upstream changes. Git detects that you broke assume-unchanged promise and choses to reflect the reality by resetting the flag. |
+| # With local file changed.<br /> **git reset --hard**        | File content is reverted. Flag is reset to H (from h).       | File content is intact. Flag remains the same.               | Git doesn’t touch skip-worktree file and reflects reality (the file promised to be unchanged actually was changed) for assume-unchanged file. |
 
-这边我也测试了一下（git version: 2.7.4），对其中一项存疑，第二行文件在本地和远端都发生变化时，如果文件被标记为assume-unchanged，在进行git stash的时候并不会"discard all local changes"，而是跟skip-worktree的文件一样不会有任何反应，如前文所述，开发者需要手动对这些文件做一些处理。不过在现实环境中不应该存在这种情况：被标记为assume-unchanged的文件发生了本地变更。
+这边我也测试了一下（git version: 2.7.4），大部分表述都没有问题，仅对其中一项存疑，第二行中，当文件在本地和远端都发生变化时，如果该文件被标记为assume-unchanged，在进行git stash的时候并不会"discard all local changes"，而是跟标记为skip-worktree时一样不会有任何反应，如前文所述，开发者需要手动对这些文件做一些处理。不过在现实环境中不应该存在这种情况：被标记为assume-unchanged的文件发生了本地变更。
 
 ```bash
 # git stash
 No local changes to save
 ```
 
-最后提一下，第四行测试，如果发生了本地变更，在`git reset --hard`之后，标记为assume-unchanged的文件会被打回原形(revert)被删除标记（Git：说好的不会变呢，怎么又在本地变了呢，幸好被我reset发现了，给你取消标记了）；而标记为skip-worktree的文件不受影响，保持本地变更。
+最后提一下，表格中的第四项测试，如果文件发生了本地变更，在`git reset --hard`之后，标记为assume-unchanged的文件会被打回原形(revert)并删除assume-unchanged标记（Git：说好的不会变呢，怎么又在本地变了呢，幸好reset被我发现了，给你取消标记了）；而标记为skip-worktree的文件不受影响，保留了本地变更。
 
 ### 总结
 
@@ -202,6 +203,6 @@ No local changes to save
 
 ### 参考
 
-[1]: https://automationpanda.com/2018/09/19/ignoring-files-with-git/	"IGNORING FILES WITH GIT"
-[2]: https://fallengamer.livejournal.com/93321.html	"FallenGameR's blog"
-[3]: https://stackoverflow.com/questions/13630849/git-difference-between-assume-unchanged-and-skip-worktree
+1. [IGNORING FILES WITH GIT](https://automationpanda.com/2018/09/19/ignoring-files-with-git/)
+2. [FallenGameR's blog](https://fallengamer.livejournal.com/93321.html)
+3. [Stackoverflow](https://stackoverflow.com/questions/13630849/git-difference-between-assume-unchanged-and-skip-worktree)
