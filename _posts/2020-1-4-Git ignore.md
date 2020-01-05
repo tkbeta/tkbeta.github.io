@@ -183,10 +183,10 @@ Git设置这个flag的初衷是为了加速和优化git stat的性能，因此�
 | # No local changes, upstream file changed.<br /> **git pull** | Content is updated, flag is lost. `git ls-files -v` would show that flag is modified to H (from h). | Content is updated, flag is preserved. `git ls-files -v` would show the same S flag as before the pull. | Both flags wouldn’t prevent you from getting upstream changes. Git detects that you broke assume-unchanged promise and choses to reflect the reality by resetting the flag. |
 | # With local file changed.<br /> **git reset --hard**        | File content is reverted. Flag is reset to H (from h).       | File content is intact. Flag remains the same.               | Git doesn’t touch skip-worktree file and reflects reality (the file promised to be unchanged actually was changed) for assume-unchanged file. |
 
-这边我也测试了一下（git version: 2.7.4），大部分表述都没有问题，仅对其中一项存疑，第二行中，当文件在本地和远端都发生变化时，如果该文件被标记为assume-unchanged，在进行git stash的时候并不会"discard all local changes"，而是跟标记为skip-worktree时一样不会有任何反应，如前文所述，开发者需要手动对这些文件做一些处理。不过在现实环境中不应该存在这种情况：被标记为assume-unchanged的文件发生了本地变更。
+这边我也测试了一下（`git version: 2.7.4`），大部分表述都没有问题，仅对其中一项存疑，第二行中，当文件在本地和远端都发生变化时，如果该文件被标记为assume-unchanged，在进行git stash的时候并不会"discard all local changes"，而是跟标记为skip-worktree时一样不会有任何反应，如前文所述，开发者需要手动对这些文件做一些处理。不过在现实环境中不应该存在这种情况：被标记为assume-unchanged的文件发生了本地变更。
 
 ```bash
-# git stash
+$ git stash
 No local changes to save
 ```
 
