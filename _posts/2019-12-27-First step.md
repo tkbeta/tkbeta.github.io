@@ -1,4 +1,5 @@
 ---
+layout: article
 title: 第一篇
 tags: 废话
 ---
