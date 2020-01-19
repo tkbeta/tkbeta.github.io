@@ -14,6 +14,7 @@ $ python -c "import subprocess; subprocess.Popen('echo -e', shell=True)"
 -e
 $ python -c "import subprocess; subprocess.Popen('echo -n', shell=True)"
 ```
+{: .copyable}
 
 即-e参数不生效，被当作一个普通文本输出到屏幕，但-n参数可以生效，os.system也有同样的问题：
 
@@ -21,6 +22,7 @@ $ python -c "import subprocess; subprocess.Popen('echo -n', shell=True)"
 $ python -c "import os; os.system('echo -e')"
 -e
 ```
+{: .copyable}
 
 换了Ubuntu和CentOS均是一样的问题，为什么`echo`放到python里面去执行就是不一样的行为？
 
@@ -32,6 +34,7 @@ sh:~$ echo -e
 sh:~$ which echo
 /bin/echo
 ```
+{: .copyable}
 
 `which echo`得到的程序路径和`bash`下查看的一样，那为什么`echo`指令却行为不一？
 
