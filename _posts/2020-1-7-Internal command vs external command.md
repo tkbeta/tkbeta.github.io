@@ -7,14 +7,13 @@ key: internal_external_commands
 
 今天使用python的subprocess.Popen去执行系统命令时，碰到一个奇怪的问题，精简后如下所示：
 
-```bash
+{% highlight bash linenos %}
 $ echo -e
 
 $ python -c "import subprocess; subprocess.Popen('echo -e', shell=True)"
 -e
 $ python -c "import subprocess; subprocess.Popen('echo -n', shell=True)"
-```
-{: .copyable}
+{% endhighlight %}
 
 即-e参数不生效，被当作一个普通文本输出到屏幕，但-n参数可以生效，os.system也有同样的问题：
 
