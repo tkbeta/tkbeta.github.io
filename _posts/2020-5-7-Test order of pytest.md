@@ -9,13 +9,13 @@ key: test_order_of_pytest
 
 自动化环境使用Allure来展示pytest的测试报告，对其进行日志分析时，常常发现一个困扰：测试的顺序似乎总是让人捉摸不透，有时候像是测试标题字符排序，有时候又是根据测试函数定义的先后顺序排序；而且pytest对子目录的执行顺序也跟Allure这边（无论是按order还是按name排序）的展示不一致。结果是，如果有case因为环境不ready而失败时，无法快速定位到该失败case上一条执行的case。
 
-![image-20200507233445352](pic/test_order_of_pytest_1.png)
+![](pic/test_order_of_pytest_1.png)
 
 ## 问题
 
-针对这个问题，文档找到的说法是：
+针对这个问题，文档中找到的说法是：
 
-Pytest runs the test in the same order as they are found in the test module.
+> Pytest runs the test in the same order as they are found in the test module.
 
 这里只提到了同一个python文件(module)中，测试时是按test定义的顺序，但未提到目录顺序，感觉起来是按字母排序，但是又跟Allure这边按name排序看到的不一致。所以有了第一个问题：
 
