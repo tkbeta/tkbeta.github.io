@@ -9,7 +9,7 @@ key: test_order_of_pytest
 
 自动化环境使用Allure来展示pytest的测试报告，对其进行日志分析时，常常发现一个困扰：测试的顺序似乎总是让人捉摸不透，有时候像是测试标题字符排序，有时候又是根据测试函数定义的先后顺序排序；而且pytest对子目录的执行顺序也跟Allure这边（无论是按order还是按name排序）的展示不一致。结果是，如果有case因为环境不ready而失败时，无法快速定位到该失败case上一条执行的case。
 
-![](pic/test_order_of_pytest_1.png)
+![](asserts/posts/test_order_of_pytest/test_order_of_pytest_1.png)
 
 ## 问题
 
