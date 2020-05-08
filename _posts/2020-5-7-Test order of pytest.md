@@ -9,7 +9,7 @@ key: test_order_of_pytest
 
 自动化环境使用Allure来展示pytest的测试报告，对其进行日志分析时，常常发现一个困扰：测试的顺序似乎总是让人捉摸不透，有时候像是测试标题字符排序，有时候又是根据测试函数定义的先后顺序排序；而且pytest对子目录的执行顺序也跟Allure这边（无论是按order还是按name排序）的展示不一致。结果是，如果有case因为环境不ready而失败时，无法快速定位到该失败case上一条执行的case。
 
-![](asserts/posts/test_order_of_pytest/test_order_of_pytest_1.png)
+![](/asserts/posts/test_order_of_pytest/test_order_of_pytest_1.png)
 
 ## 问题
 
@@ -85,15 +85,13 @@ key: test_order_of_pytest
 
 这里可以看到，pytest收集测试用例的时候，会优先根据文件的路径进行排序，其次是行号。那回到第一个问题，如果文件是按照路径名字排序，那为何跟在Allure上选择按name排序的结果不同呢？原因是Allure按name排序时并不区分大小写，如第一张图所示，对于testcase.Function_Test.case_10_S3下的文件，排序方式如下：
 
-```
 test_S3_a_new_S3_pool > test_S3_bucket_access_logging > test_S3_Default_S3_pool > test_S3_quota
-```
+{: .success}
 
 而python对于字符串的排序其实是区分大小写的，大写字母会优先于小写字母，也就是这样：
 
-```
 test_S3_Default_S3_pool > test_S3_a_new_S3_pool > test_S3_bucket_access_logging > test_S3_quota
-```
+{: .success}
 
 对照日志的时期戳，这也正是pytest执行测试的顺序。如果想让Allure和pytest的顺序一致，可以全部改用小写字母，或是为每个文件夹名字添加数字编号，安排测试顺序。
 
